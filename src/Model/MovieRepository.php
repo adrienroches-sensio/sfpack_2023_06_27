@@ -22,7 +22,7 @@ final class MovieRepository
     /**
      * @var list<MovieRaw>
      */
-    public final const MOVIES = [
+    private const MOVIES = [
         [
             'slug' => '2015-une-merveille-histoire-du-temps',
             'title' => 'Une Merveilleuse Histoire du Temps',
