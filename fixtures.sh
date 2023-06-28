@@ -18,3 +18,8 @@ symfony console doctrine:query:sql \
 ;
 
 symfony console doctrine:query:sql "INSERT INTO Genre (name) VALUES ('Comedy'), ('Famille'), ('Biopic'), ('Drame')";
+
+symfony console doctrine:query:sql "INSERT INTO movie_genre (movie_id, genre_id) VALUES (1, 1)";
+symfony console doctrine:query:sql "INSERT INTO movie_genre (movie_id, genre_id) VALUES (2, 2)";
+symfony console doctrine:query:sql "INSERT INTO movie_genre (movie_id, genre_id) VALUES (4, 3)";
+symfony console doctrine:query:sql "INSERT INTO movie_genre (movie_id, genre_id) VALUES (4, 4)";

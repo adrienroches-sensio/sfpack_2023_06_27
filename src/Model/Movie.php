@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Entity\Genre as GenreEntity;
 use App\Entity\Movie as MovieEntity;
 use DateTimeImmutable;
-use function array_map;
+use function array_map as array_mapAlias;
 
 final class Movie
 {
@@ -26,12 +27,12 @@ final class Movie
     public static function fromEntity(MovieEntity $movieEntity): self
     {
         return new self(
-            slug: $movieEntity->getSlug(),
-            title: $movieEntity->getTitle(),
-            plot: $movieEntity->getPlot(),
-            poster: $movieEntity->getPoster(),
+            slug:       $movieEntity->getSlug(),
+            title:      $movieEntity->getTitle(),
+            plot:       $movieEntity->getPlot(),
+            poster:     $movieEntity->getPoster(),
             releasedAt: $movieEntity->getReleasedAt(),
-            genres: [],
+            genres:     array_mapAlias(static fn(GenreEntity $genre): string => $genre->getName(), $movieEntity->getGenres()->toArray()),
         );
     }
 
@@ -42,7 +43,7 @@ final class Movie
      */
     public static function fromEntities(array $movieEntities): array
     {
-        return array_map(self::fromEntity(...), $movieEntities);
+        return array_mapAlias(self::fromEntity(...), $movieEntities);
     }
 
     public function year(): string
