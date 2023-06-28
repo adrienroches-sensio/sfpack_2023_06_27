@@ -7,8 +7,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\Count;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\LessThanOrEqual;
+use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\Regex;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
+#[ORM\UniqueConstraint(
+    name: 'idx_movie_unique_slug',
+    columns: ['slug']
+)]
 class Movie
 {
     public const SLUG_FORMAT = '\d{4}-\w([-\w])*';
@@ -18,12 +28,18 @@ class Movie
     #[ORM\Column]
     private ?int $id = null;
 
+    #[NotNull]
+    #[Regex('#'.self::SLUG_FORMAT.'#')]
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
+    #[NotNull]
+    #[Length(min: 3)]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+    #[LessThanOrEqual('+100 years')]
+    #[GreaterThanOrEqual('01 Jan 1800')]
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $releasedAt = null;
 
@@ -33,6 +49,7 @@ class Movie
     #[ORM\Column(length: 255)]
     private ?string $poster = null;
 
+    #[Count(min: 1)]
     #[ORM\ManyToMany(targetEntity: Genre::class, inversedBy: 'movies')]
     private Collection $genres;
 
