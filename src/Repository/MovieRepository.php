@@ -21,6 +21,26 @@ class MovieRepository extends ServiceEntityRepository
         parent::__construct($registry, Movie::class);
     }
 
+    /**
+     * @return list<Movie>
+     */
+    public function listAll(): array
+    {
+        return $this->findAll();
+    }
+
+    public function getBySlug(string $slug): Movie
+    {
+        $qb = $this->createQueryBuilder('movie');
+
+        $qb
+            ->andWhere($qb->expr()->eq('movie.slug', ':slug'))
+            ->setParameter('slug', $slug)
+        ;
+
+        return $qb->getQuery()->getSingleResult();
+    }
+
     public function save(Movie $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
@@ -38,29 +58,28 @@ class MovieRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+    //    /**
+    //     * @return Movie[] Returns an array of Movie objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('m')
+    //            ->andWhere('m.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('m.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
 
-//    /**
-//     * @return Movie[] Returns an array of Movie objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('m.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Movie
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    }
+    //    public function findOneBySomeField($value): ?Movie
+    //    {
+    //        return $this->createQueryBuilder('m')
+    //            ->andWhere('m.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }
