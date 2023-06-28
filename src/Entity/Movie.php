@@ -3,16 +3,22 @@
 namespace App\Entity;
 
 use App\Repository\MovieRepository;
+use App\Validator\Constraints\MovieSlugFormat;
+use App\Validator\Constraints\PosterExists;
+use App\Validator\Constraints\ValidPoster;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use http\Message;
+use Symfony\Component\Validator\Constraints\AtLeastOneOf;
 use Symfony\Component\Validator\Constraints\Count;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\LessThanOrEqual;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\Url;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
 #[ORM\UniqueConstraint(
@@ -29,7 +35,7 @@ class Movie
     private ?int $id = null;
 
     #[NotNull]
-    #[Regex('#'.self::SLUG_FORMAT.'#')]
+    #[MovieSlugFormat]
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
@@ -46,6 +52,7 @@ class Movie
     #[ORM\Column(type: Types::TEXT)]
     private ?string $plot = null;
 
+    #[ValidPoster]
     #[ORM\Column(length: 255)]
     private ?string $poster = null;
 
