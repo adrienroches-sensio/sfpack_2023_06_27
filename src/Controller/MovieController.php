@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Movie as MovieEntity;
 use App\Form\MovieType;
 use App\Model\Movie;
 use App\Repository\MovieRepository;
@@ -47,9 +48,22 @@ class MovieController extends AbstractController
         name: 'app_movies_new',
         methods: ['GET'],
     )]
-    public function new(): Response
+    #[Route(
+        path: '/movies/{slug}/edit',
+        name: 'app_movies_edit',
+        requirements: [
+            'slug' => '\d{4}-\w([-\w])*'
+        ],
+        methods: ['GET'],
+    )]
+    public function newOrEdit(MovieRepository $movieRepository, string|null $slug = null): Response
     {
-        $form = $this->createForm(MovieType::class);
+        $movie = new MovieEntity();
+        if (null !== $slug) {
+            $movie = $movieRepository->getBySlug($slug);
+        }
+
+        $form = $this->createForm(MovieType::class, $movie);
 
         return $this->render('movie/new.html.twig', [
             'movie_form' => $form,
