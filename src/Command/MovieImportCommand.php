@@ -12,15 +12,19 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'app:movie:import',
-    description: 'Add a short description for your command',
+    description: 'Search and import one or more movies into the database.',
+    aliases: [
+        'movie:import',
+        'omdb:movie:import',
+    ]
 )]
 class MovieImportCommand extends Command
 {
     protected function configure(): void
     {
         $this
-            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
+            ->addArgument('id-or-title', InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'IMDB ID or title to search.')
+            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Will not import into database. Only displays what would happen.')
         ;
     }
 
