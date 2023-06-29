@@ -17,6 +17,6 @@ Install
 $ symfony composer install
 $ yarn install # or npm install
 $ yarn dev # or npm run-script dev
-$ ./fixtures.sh
+$ ./fixtures.sh # or if powershell : .\fixtures.ps1
 $ symfony serve -d 
 ```
