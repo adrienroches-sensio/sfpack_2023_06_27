@@ -163,9 +163,9 @@ class Movie
         return $this->rated;
     }
 
-    public function setRated(Rated $rated): static
+    public function setRated(Rated|null $rated): static
     {
-        $this->rated = $rated;
+        $this->rated = $rated ?? Rated::GeneralAudiences;
 
         return $this;
     }

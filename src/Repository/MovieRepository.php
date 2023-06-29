@@ -62,6 +62,11 @@ class MovieRepository extends ServiceEntityRepository
         return $qb->getQuery()->getSingleResult();
     }
 
+    public function flush(): void
+    {
+        $this->getEntityManager()->flush();
+    }
+
     public function save(Movie $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
