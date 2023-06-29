@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Model\Rated;
 use App\Repository\MovieRepository;
 use App\Validator\Constraints\MovieSlugFormat;
 use App\Validator\Constraints\PosterExists;
@@ -59,6 +60,9 @@ class Movie
     #[Count(min: 1)]
     #[ORM\ManyToMany(targetEntity: Genre::class, inversedBy: 'movies')]
     private Collection $genres;
+
+    #[ORM\Column(length: 10, enumType: Rated::class, options: ['default' => Rated::GeneralAudiences])]
+    private Rated $rated = Rated::GeneralAudiences;
 
     public function __construct()
     {
@@ -150,6 +154,18 @@ class Movie
     public function removeGenre(Genre $genre): static
     {
         $this->genres->removeElement($genre);
+
+        return $this;
+    }
+
+    public function getRated(): Rated
+    {
+        return $this->rated;
+    }
+
+    public function setRated(Rated $rated): static
+    {
+        $this->rated = $rated;
 
         return $this;
     }
