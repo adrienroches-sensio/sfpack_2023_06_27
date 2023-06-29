@@ -8,5 +8,8 @@ use App\Omdb\Client\Model\Movie;
 
 interface OmdbApiClientInterface
 {
+    /**
+     * @throws NoResult When the $imdbId was not found.
+     */
     public function getById(string $imdbId): Movie;
 }

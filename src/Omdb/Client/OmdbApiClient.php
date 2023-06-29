@@ -6,6 +6,7 @@ namespace App\Omdb\Client;
 
 use App\Omdb\Client\Model\Movie;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Throwable;
 
 final class OmdbApiClient implements OmdbApiClientInterface
 {
@@ -23,7 +24,16 @@ final class OmdbApiClient implements OmdbApiClientInterface
             ]
         ]);
 
-        $movieRaw = $response->toArray();
+        try {
+            /** @var array{Title: string, Year: string, Rated: string, Released: string, Genre: string, Plot: string, Poster: string, imdbID: string, Type: string, Response: string} $movieRaw */
+            $movieRaw = $response->toArray(true);
+        } catch (Throwable $throwable) {
+            throw NoResult::forId($imdbId, $throwable);
+        }
+
+        if (array_key_exists('Response', $movieRaw) === true && 'False' === $movieRaw['Response']) {
+            throw NoResult::forId($imdbId);
+        }
 
         return new Movie(
             Title: $movieRaw['Title'],
