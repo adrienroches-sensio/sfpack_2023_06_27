@@ -10,10 +10,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class NavBarController extends AbstractController
 {
-    public function main(MovieRepository $movieRepository): Response
+    public function __construct(
+        private readonly MovieRepository $movieRepository,
+    ) {
+    }
+
+    public function main(): Response
     {
         return $this->render('navbar.html.twig', [
-            'movies' => $movieRepository->listOnlySlugAndTitles(),
+            'movies' => $this->movieRepository->listOnlySlugAndTitles(),
         ]);
     }
 }
