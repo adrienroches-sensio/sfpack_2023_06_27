@@ -15,8 +15,8 @@ Install
 
 ```bash
 $ symfony composer install
-$ yarn install
-$ yarn dev
+$ yarn install # or npm install
+$ yarn dev # or npm run-script dev
 $ ./fixtures.sh
 $ symfony serve -d 
 ```
